@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="header">
+    <h1>AI Prompt Library</h1>
+    <p>Your curated collection of image generation magic.</p>
+    <a routerLink="/add-prompt" class="btn-primary">Add New Prompt</a>
+  </div>
+
+  <div *ngIf="loading" class="loader">
+    <div class="spinner"></div>
+    <p>Loading your library...</p>
+  </div>
+
+  <div *ngIf="error" class="error-box">
+    <p>{{ error }}</p>
+    <button (click)="ngOnInit()">Retry</button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="prompt-grid">
+    <div *ngFor="let prompt of prompts" class="prompt-card" [routerLink]="['/prompts', prompt.id]">
+      <div class="card-header">
+        <h3>{{ prompt.title }}</h3>
+        <span class="badge" [ngClass]="getComplexityClass(prompt.complexity)">
+          Complexity: {{ prompt.complexity }}
+        </span>
+      </div>
+      <div class="card-footer">
+        <span class="date">{{ prompt.created_at | date:'shortDate' }}</span>
+        <span class="view-more">View Details →</span>
+      </div>
+    </div>
+
+    <div *ngIf="prompts.length === 0" class="empty-state">
+      <p>No prompts found. Start by adding your first one!</p>
+    </div>
+  </div>
+</div>

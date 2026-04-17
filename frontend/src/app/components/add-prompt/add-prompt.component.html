@@ -1,0 +1,47 @@
+<div class="container small">
+  <div class="header">
+    <a routerLink="/prompts" class="back-link">← Cancel and Back</a>
+    <h1>Create New Prompt</h1>
+    <p>Share your creative formulas with the library.</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-box">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <form [formGroup]="promptForm" (ngSubmit)="onSubmit()" class="modern-form">
+    <div class="form-group">
+      <label for="title">Prompt Title</label>
+      <input type="text" id="title" formControlName="title" placeholder="e.g. Neon Cityscape 2077" [ngClass]="{'is-invalid': promptForm.get('title')?.invalid && promptForm.get('title')?.touched}">
+      <div *ngIf="promptForm.get('title')?.invalid && promptForm.get('title')?.touched" class="invalid-feedback">
+        <span *ngIf="promptForm.get('title')?.errors?.['required']">Title is required.</span>
+        <span *ngIf="promptForm.get('title')?.errors?.['minlength']">Title must be at least 3 characters.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="content">Prompt Content</label>
+      <textarea id="content" formControlName="content" rows="6" placeholder="Paste your full prompt here..." [ngClass]="{'is-invalid': promptForm.get('content')?.invalid && promptForm.get('content')?.touched}"></textarea>
+      <div *ngIf="promptForm.get('content')?.invalid && promptForm.get('content')?.touched" class="invalid-feedback">
+        <span *ngIf="promptForm.get('content')?.errors?.['required']">Content is required.</span>
+        <span *ngIf="promptForm.get('content')?.errors?.['minlength']">Content must be at least 20 characters.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="complexity">Complexity (1-10)</label>
+      <div class="range-container">
+        <input type="range" id="complexity" formControlName="complexity" min="1" max="10" step="1">
+        <span class="range-value">{{ promptForm.get('complexity')?.value }}</span>
+      </div>
+      <p class="hint">1 = Simple, 10 = High Detail/Expert</p>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="submitting">
+        <span *ngIf="!submitting">Save Prompt</span>
+        <span *ngIf="submitting">Saving...</span>
+      </button>
+    </div>
+  </form>
+</div>

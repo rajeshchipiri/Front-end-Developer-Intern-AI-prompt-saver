@@ -1,0 +1,37 @@
+<div class="container small">
+  <div class="header">
+    <a routerLink="/prompts" class="back-link">← Back to Library</a>
+  </div>
+
+  <div *ngIf="loading" class="loader">
+    <div class="spinner"></div>
+    <p>Retrieving detail...</p>
+  </div>
+
+  <div *ngIf="error" class="error-box">
+    <p>{{ error }}</p>
+    <a routerLink="/prompts" class="btn-primary">Return Home</a>
+  </div>
+
+  <article *ngIf="!loading && !error" class="detail-card">
+    <div class="detail-header">
+      <h1>{{ prompt.title }}</h1>
+      <div class="meta">
+        <span class="view-pill">Views: {{ prompt.view_count }}</span>
+        <span class="date-pill">{{ prompt.created_at | date:'longDate' }}</span>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>Prompt Content</h3>
+      <div class="content-box">
+        <pre>{{ prompt.content }}</pre>
+        <button class="copy-btn" (click)="$event.target">Copy to Clipboard</button>
+      </div>
+    </div>
+
+    <div class="footer-meta">
+      <p>Complexity Score: <strong>{{ prompt.complexity }}/10</strong></p>
+    </div>
+  </article>
+</div>
