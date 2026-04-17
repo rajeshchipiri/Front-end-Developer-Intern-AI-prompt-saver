@@ -32,7 +32,7 @@ COPY --from=frontend-build /app/frontend/dist/frontend /usr/share/nginx/html
 # nginx configuration
 RUN echo 'server { \
     listen 80; \
-    location /prompts/ { \
+    location /api/ { \
         proxy_pass http://localhost:8000; \
         proxy_set_header Host $host; \
         proxy_set_header X-Real-IP $remote_addr; \
