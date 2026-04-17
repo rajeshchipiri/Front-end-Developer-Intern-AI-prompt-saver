@@ -1,0 +1,48 @@
+services:
+  # Backend Service
+  - type: web
+    name: ai-prompt-backend
+    env: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python manage.py migrate && python manage.py runserver 0.0.0.0:10000
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-prompt-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: ai-prompt-redis
+          property: connectionString
+      - key: PORT
+        value: 10000
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: DEBUG
+        value: "False"
+
+  # Frontend Service
+  - type: web
+    name: ai-prompt-frontend
+    env: node
+    rootDir: frontend
+    plan: free
+    buildCommand: npm install && npx ng build
+    startCommand: npx ng serve --host 0.0.0.0 --port 10000 --disable-host-check
+    envVars:
+      - key: PORT
+        value: 10000
+
+# Database
+databases:
+  - name: ai-prompt-db
+    plan: free
+
+# Redis
+redis:
+  - name: ai-prompt-redis
+    plan: free
+    ipAllowList: [] # Only allow internal connections

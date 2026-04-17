@@ -5,17 +5,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Prompt
 
-# Get redis config from settings or environment
-REDIS_HOST = getattr(settings, 'REDIS_HOST', 'localhost')
-REDIS_PORT = getattr(settings, 'REDIS_PORT', 6379)
-
+# Redis setup using URL
 try:
-    r = redis.Redis(
-        host=REDIS_HOST,
-        port=REDIS_PORT,
-        db=0,
-        decode_responses=True
-    )
+    REDIS_URL = getattr(settings, 'REDIS_URL', 'redis://localhost:6379/0')
+    r = redis.Redis.from_url(REDIS_URL, decode_responses=True)
 except Exception:
     r = None
 
